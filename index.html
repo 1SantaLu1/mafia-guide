@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-lENgQRqHxcze6NS1PSOF3tNIhHJ75Nfo+vpoQjK1yFM=' https://challenges.cloudflare.com; style-src 'sha256-dhWl/1uMSSoPiawkSYO++UGZI0Z/RZW7vsqGvLE2KeE='; font-src 'self'; img-src 'self' data:; connect-src https://hanami-mafia-support.santalu1-hanami.workers.dev; frame-src https://challenges.cloudflare.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-s91PQTaiEfHTg8GAQ+GuxT+12oQai7cB4k9i5jqMOTg=' https://challenges.cloudflare.com; style-src 'sha256-dhWl/1uMSSoPiawkSYO++UGZI0Z/RZW7vsqGvLE2KeE='; font-src 'self'; img-src 'self' data:; connect-src https://hanami-mafia-support.santalu1-hanami.workers.dev; frame-src https://challenges.cloudflare.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0e0f14">
 <meta name="color-scheme" content="dark">
@@ -852,7 +852,7 @@ footer a{color:var(--muted)}
   /* ИИ-помощник: переписка живёт только в памяти открытой вкладки. */
   const aiChat = $('#aiChat'), aiFab = $('#aiFab'), aiMessages = $('#aiMessages'), aiInput = $('#aiInput');
   const aiForm = $('#aiForm'), aiSend = $('#aiSend'), aiStatus = $('#aiStatus'), aiExamples = $('#aiExamples');
-  const aiEndpoint = aiChat.dataset.aiEndpoint.trim(); let aiHistory = [], aiBusy = false;
+  const aiEndpoint = aiChat.dataset.aiEndpoint.trim(); let aiHistory = [], aiBusy = false, aiLast = null, aiSentAt = 0;
 
   /* Cloudflare Turnstile: включается, только если в data-turnstile-sitekey указан ключ сайта. Пока ключа нет, ничего не загружается. */
   const tsKey = (aiChat.dataset.turnstileSitekey || '').trim();
@@ -938,13 +938,19 @@ footer a{color:var(--muted)}
   const greeting = () => addMessage('assistant', 'Здравствуйте! Я помогу с правилами городской мафии Hanami. Опишите ситуацию — отвечу по опубликованной инструкции и укажу раздел-основание.');
   const openAi = open => { aiChat.hidden = !open; aiFab.setAttribute('aria-expanded', String(open)); if (open) { if (tsKey) loadTurnstile().catch(() => {}); aiInput.focus({ preventScroll: true }); if (!aiMessages.children.length) greeting(); } };
   aiFab.onclick = () => openAi(aiChat.hidden); $('#aiClose').onclick = () => openAi(false);
-  $('#aiClear').onclick = () => { aiHistory = []; aiMessages.replaceChildren(); aiExamples.hidden = false; aiStatus.textContent = ''; greeting(); aiInput.focus(); };
+  $('#aiClear').onclick = () => { aiHistory = []; aiLast = null; aiMessages.replaceChildren(); aiExamples.hidden = false; aiStatus.textContent = ''; greeting(); aiInput.focus(); };
   aiExamples.onclick = e => { const button = e.target.closest('button'); if (button) { aiInput.value = button.textContent; aiForm.requestSubmit(); } };
   aiForm.addEventListener('submit', async e => {
     e.preventDefault(); const question = aiInput.value.trim(); if (!question || aiBusy) return;
+    /* повтор того же вопроса не отправляется: ответ уже есть выше, а каждый запрос расходует суточный лимит помощника */
+    const sameKey = t => t.toLowerCase().replace(/[^a-zа-яё0-9]+/g, ' ').trim();
+    if (aiLast && sameKey(aiLast.q) === sameKey(question) && Date.now() - aiLast.at < 10 * 60 * 1000 && aiMessages.querySelector('.ai-message.assistant:last-of-type, .ai-message.assistant')) {
+      aiStatus.className = 'ai-status'; aiStatus.textContent = 'Этот вопрос вы уже задавали, ответ выше. Уточните или задайте другой.'; aiInput.value = ''; aiInput.style.height = ''; aiMessages.scrollTop = aiMessages.scrollHeight; return;
+    }
+    if (Date.now() - aiSentAt < 1500) return;
     aiExamples.hidden = true;
     if (!aiEndpoint) { aiStatus.textContent = 'ИИ-помощник временно недоступен: сервер ещё не настроен.'; return; }
-    addMessage('user', question); aiInput.value = ''; aiInput.style.height = ''; aiBusy = true; aiSend.disabled = true; aiStatus.className = 'ai-status ai-typing'; aiStatus.textContent = 'Ищу правила и формирую ответ';
+    aiSentAt = Date.now(); addMessage('user', question); aiInput.value = ''; aiInput.style.height = ''; aiBusy = true; aiSend.disabled = true; aiStatus.className = 'ai-status ai-typing'; aiStatus.textContent = 'Ищу правила и формирую ответ';
     try {
       const turnstileToken = await getToken();
       const res = await fetch(aiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question, history: aiHistory.slice(-6), turnstileToken, stream: true }), signal: AbortSignal.timeout(50000) });
@@ -961,7 +967,7 @@ footer a{color:var(--muted)}
         if (!got) throw new Error('stream_incomplete');
         data = { answer: got.answer, sources: got.sources };
       } else { data = await res.json().catch(() => ({})); if (!res.ok) throw new Error(data.error || 'request_failed'); }
-      aiStatus.textContent = ''; addMessage('assistant', data.answer, Array.isArray(data.sources) ? data.sources : []); aiHistory.push({ role: 'user', content: question }, { role: 'assistant', content: data.answer });
+      aiLast = { q: question, at: Date.now() }; aiStatus.textContent = ''; addMessage('assistant', data.answer, Array.isArray(data.sources) ? data.sources : []); aiHistory.push({ role: 'user', content: question }, { role: 'assistant', content: data.answer });
     } catch (error) {
       const code = error instanceof Error ? error.message : '';
       aiStatus.textContent = code === 'rate_limited' ? 'Слишком много запросов. Подождите минуту и попробуйте снова.'
