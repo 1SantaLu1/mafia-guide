@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCZiCdp6O9ajAJDD+VrJhyWczTe6B6tFhm3+yTcyEjY=' https://challenges.cloudflare.com; style-src 'sha256-dhWl/1uMSSoPiawkSYO++UGZI0Z/RZW7vsqGvLE2KeE='; font-src 'self'; img-src 'self' data:; connect-src https://hanami-mafia-support.santalu1-hanami.workers.dev; frame-src https://challenges.cloudflare.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-lENgQRqHxcze6NS1PSOF3tNIhHJ75Nfo+vpoQjK1yFM=' https://challenges.cloudflare.com; style-src 'sha256-dhWl/1uMSSoPiawkSYO++UGZI0Z/RZW7vsqGvLE2KeE='; font-src 'self'; img-src 'self' data:; connect-src https://hanami-mafia-support.santalu1-hanami.workers.dev; frame-src https://challenges.cloudflare.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0e0f14">
 <meta name="color-scheme" content="dark">
@@ -883,11 +883,18 @@ footer a{color:var(--muted)}
     });
   };
   const escapeHtml = value => value.replace(/[&<>'"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[c]);
-  const formatAnswer = value => escapeHtml(value).split(/\n{2,}/).map(p => {
-    const line = p.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/`(.+?)`/g, '<code>$1</code>');
-    if (/^(?:[-•] )/m.test(line)) return '<ul>' + line.split('\n').filter(Boolean).map(x => '<li>' + x.replace(/^(?:[-•] )/, '') + '</li>').join('') + '</ul>';
-    if (/^\d+\. /m.test(line)) return '<ol>' + line.split('\n').filter(Boolean).map(x => '<li>' + x.replace(/^\d+\. /, '') + '</li>').join('') + '</ol>';
-    return '<p>' + line.replace(/\n/g, '<br>') + '</p>';
+  const inline = t => t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/`(.+?)`/g, '<code>$1</code>');
+  /* текст ответа всегда экранируется до разметки; списки собираются построчно, поэтому «Вывод» и пункты в одном абзаце тоже разбираются верно */
+  const formatAnswer = value => escapeHtml(value).split(/\n{2,}/).map(block => {
+    let html = '', list = '', para = [];
+    const flushPara = () => { if (para.length) { html += '<p>' + para.join('<br>') + '</p>'; para = []; } };
+    const flushList = () => { if (list) { html += '</' + list + '>'; list = ''; } };
+    block.split('\n').filter(l => l.trim()).forEach(l => {
+      const bullet = /^[-•] (.*)$/.exec(l), num = /^\d+\. (.*)$/.exec(l), kind = bullet ? 'ul' : num ? 'ol' : '';
+      if (kind) { flushPara(); if (list !== kind) { flushList(); html += '<' + kind + '>'; list = kind; } html += '<li>' + inline((bullet || num)[1]) + '</li>'; }
+      else { flushList(); para.push(inline(l)); }
+    });
+    flushList(); flushPara(); return html;
   }).join('');
   const addMessage = (role, text, sources = []) => {
     const el = document.createElement('div'); el.className = 'ai-message ' + role;
@@ -940,8 +947,20 @@ footer a{color:var(--muted)}
     addMessage('user', question); aiInput.value = ''; aiInput.style.height = ''; aiBusy = true; aiSend.disabled = true; aiStatus.className = 'ai-status ai-typing'; aiStatus.textContent = 'Ищу правила и формирую ответ';
     try {
       const turnstileToken = await getToken();
-      const res = await fetch(aiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question, history: aiHistory.slice(-6), turnstileToken }), signal: AbortSignal.timeout(25000) });
-      const data = await res.json().catch(() => ({})); if (!res.ok) throw new Error(data.error || 'request_failed');
+      const res = await fetch(aiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question, history: aiHistory.slice(-6), turnstileToken, stream: true }), signal: AbortSignal.timeout(50000) });
+      let data;
+      if (/ndjson/.test(res.headers.get('Content-Type') || '') && res.ok && res.body) {
+        /* ответ приходит по частям: показываем набираемый текст, а по завершении заменяем его оформленным ответом с основаниями */
+        const live = document.createElement('div'); live.className = 'ai-message assistant'; let shown = '', got = null, buf = '';
+        const reader = res.body.getReader(), dec = new TextDecoder();
+        const handle = line => { let ev; try { ev = JSON.parse(line); } catch { return; }
+          if (ev.t === 'delta' && typeof ev.text === 'string') { if (!live.isConnected) { aiStatus.textContent = ''; aiMessages.append(live); } shown += ev.text; live.textContent = shown; aiMessages.scrollTop = aiMessages.scrollHeight; }
+          else if ((ev.t === 'done' || ev.t === 'replace') && typeof ev.answer === 'string') got = ev; };
+        for (;;) { const { done, value } = await reader.read(); buf += dec.decode(value || new Uint8Array(), { stream: !done }); const lines = buf.split('\n'); buf = done ? '' : lines.pop(); lines.forEach(l => l.trim() && handle(l)); if (done) { if (buf.trim()) handle(buf); break; } }
+        live.remove();
+        if (!got) throw new Error('stream_incomplete');
+        data = { answer: got.answer, sources: got.sources };
+      } else { data = await res.json().catch(() => ({})); if (!res.ok) throw new Error(data.error || 'request_failed'); }
       aiStatus.textContent = ''; addMessage('assistant', data.answer, Array.isArray(data.sources) ? data.sources : []); aiHistory.push({ role: 'user', content: question }, { role: 'assistant', content: data.answer });
     } catch (error) {
       const code = error instanceof Error ? error.message : '';
