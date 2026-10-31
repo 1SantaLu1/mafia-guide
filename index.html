@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-sPSbSzcY6S/bGRTWf2IyY2I/IDj6gyTNbriWxBQirJY='; style-src 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src https://hanami-mafia-support.santalu1-hanami.workers.dev; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ben41a8WRCzyHePo5Ewljz4raQjuunUl2byytuWE0bM=' https://challenges.cloudflare.com; style-src 'sha256-cl7QuUSpRAoA6JwP+Uf9RTPf8Akgz1T6tvVg6SAeiXY='; font-src 'self'; img-src 'self' data:; connect-src https://hanami-mafia-support.santalu1-hanami.workers.dev; frame-src https://challenges.cloudflare.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0e0f14">
 <meta name="color-scheme" content="dark">
@@ -38,6 +38,7 @@
   --max:920px; --r:18px;
 }
 *{box-sizing:border-box}
+.defs{position:absolute}
 [hidden]{display:none!important}
 html{font-size:100%;scroll-behavior:smooth;scroll-padding-top:140px;-webkit-text-size-adjust:100%}
 body{margin:0;background:radial-gradient(900px 480px at 50% -140px,#34202c 0,transparent 70%) no-repeat,var(--bg);color:var(--text);font:1rem/1.7 var(--f-body);padding-bottom:calc(110px + env(safe-area-inset-bottom,0px));overflow-wrap:break-word}
@@ -207,7 +208,7 @@ td:first-child{font-weight:600;white-space:nowrap}
 .ai-head{display:flex;align-items:center;gap:10px;padding:15px 16px;border-bottom:1px solid var(--line);background:linear-gradient(100deg,#251a21,#16181f)}.ai-head b{font:650 .88rem/1.3 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--pink)}.ai-head span{font-size:.76rem;color:var(--muted);margin-right:auto}.ai-head button{width:32px;height:32px}
 .ai-messages{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}.ai-message{max-width:91%;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);font-size:.92rem;line-height:1.55;white-space:pre-wrap}.ai-message.user{align-self:flex-end;background:var(--pink-bg);border-color:var(--pink-line)}.ai-message.assistant{align-self:flex-start}.ai-message p{margin:0 0 8px}.ai-message p:last-child{margin-bottom:0}.ai-message ul,.ai-message ol{margin:7px 0;padding-left:20px}.ai-message a{color:var(--pink)}
 .ai-sources{align-self:flex-start;max-width:91%;font-size:.76rem;color:var(--muted);margin-top:-5px}.ai-sources a{display:inline-block;margin:3px 6px 0 0;color:var(--pink)}.ai-examples{display:flex;flex-wrap:wrap;gap:6px;margin:0 14px 10px}.ai-examples button{font:500 .75rem/1.25 var(--f-body);text-align:left;color:var(--muted);background:transparent;border:1px solid var(--line);padding:7px 9px;border-radius:10px;cursor:pointer}.ai-examples button:hover{border-color:var(--pink-line);color:var(--text)}
-.ai-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:var(--panel2)}.ai-form textarea{min-width:0;flex:1;resize:none;max-height:110px;padding:10px 11px;color:var(--text);font:inherit;line-height:1.4;background:var(--bg);border:1px solid var(--line2);border-radius:11px}.ai-form textarea:focus{outline:none;border-color:var(--pink)}.ai-form button{align-self:end;min-height:40px;padding:0 13px;border:0;border-radius:11px;background:var(--pink);color:#1a0f15;font:700 .84rem/1 var(--f-body);cursor:pointer}.ai-form button:disabled{opacity:.55;cursor:wait}.ai-status{min-height:1.2em;margin:0 14px 8px;color:var(--gold);font-size:.78rem}.ai-typing::after{content:' …';animation:typing 1s steps(4,end) infinite}@keyframes typing{50%{opacity:.25}}
+.ai-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:var(--panel2)}.ai-form textarea{min-width:0;flex:1;resize:none;max-height:110px;padding:10px 11px;color:var(--text);font:inherit;line-height:1.4;background:var(--bg);border:1px solid var(--line2);border-radius:11px}.ai-form textarea:focus{outline:none;border-color:var(--pink)}.ai-form button{align-self:end;min-height:40px;padding:0 13px;border:0;border-radius:11px;background:var(--pink);color:#1a0f15;font:700 .84rem/1 var(--f-body);cursor:pointer}.ai-form button:disabled{opacity:.55;cursor:wait}.ai-ts{margin:0 14px 8px}.ai-ts:empty{display:none}.ai-status{min-height:1.2em;margin:0 14px 8px;color:var(--gold);font-size:.78rem}.ai-typing::after{content:' …';animation:typing 1s steps(4,end) infinite}@keyframes typing{50%{opacity:.25}}
 .rule-details{margin:18px 0;padding:0 15px 14px;border:1px solid var(--line2);border-radius:13px;background:var(--panel2)}.rule-details summary{padding:13px 0 10px;color:var(--pink);font-weight:650;cursor:pointer}.rule-details h3{margin:18px 0 6px}.rule-details .dots{margin-top:5px}
 
 footer{margin-top:34px;padding:24px 0 8px;text-align:center;color:var(--muted);font-size:.86rem}
@@ -249,7 +250,7 @@ footer a{color:var(--muted)}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
   <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4l2.5 2M9.5 2.5h5"/></g></symbol>
   <symbol id="i-copy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="12" height="12" rx="2.5"/><path d="M15.5 8.5v-3a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></g></symbol>
   <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -606,12 +607,13 @@ footer a{color:var(--muted)}
 </div>
 <button class="fab" type="button" id="fab" aria-expanded="false" aria-controls="panel"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg><span id="fabText">Таймер</span></button>
 <button class="ai-fab" type="button" id="aiFab" aria-expanded="false" aria-controls="aiChat"><i class="ai-dot" aria-hidden="true"></i>ИИ-помощник</button>
-<section class="ai-chat" id="aiChat" role="dialog" aria-modal="false" aria-label="ИИ-помощник Hanami" data-ai-endpoint="https://hanami-mafia-support.santalu1-hanami.workers.dev" hidden>
+<section class="ai-chat" id="aiChat" role="dialog" aria-modal="false" aria-label="ИИ-помощник Hanami" data-ai-endpoint="https://hanami-mafia-support.santalu1-hanami.workers.dev" data-turnstile-sitekey="" hidden>
   <div class="ai-head"><i class="ai-dot" aria-hidden="true"></i><b>ИИ-помощник</b><span>Правила Hanami</span><button class="x" type="button" id="aiClear" aria-label="Очистить диалог" title="Очистить диалог">↺</button><button class="x" type="button" id="aiClose" aria-label="Закрыть чат">×</button></div>
   <div class="ai-messages" id="aiMessages" aria-live="polite"></div>
   <div class="ai-examples" id="aiExamples" aria-label="Примеры вопросов"><button type="button">Что делать, если игрок вышел во время голосования?</button><button type="button">За что выдаётся фол?</button><button type="button">Что делать при ничьей на голосовании?</button><button type="button">Как правильно провести техническую паузу?</button><button type="button">Что делать, если игрок не подтвердил роль?</button></div>
+  <div class="ai-ts" id="aiTs"></div>
   <p class="ai-status" id="aiStatus" role="status"></p>
-  <form class="ai-form" id="aiForm"><label class="sr" for="aiInput">Вопрос помощнику</label><textarea id="aiInput" rows="2" maxlength="1200" placeholder="Опишите ситуацию…"></textarea><button type="submit" id="aiSend">Отправить</button></form>
+  <form class="ai-form" id="aiForm"><label class="sr" for="aiInput">Вопрос помощнику</label><textarea id="aiInput" rows="2" maxlength="800" placeholder="Опишите ситуацию…"></textarea><button type="submit" id="aiSend">Отправить</button></form>
 </section>
 <button class="up" type="button" id="up" aria-label="Наверх" hidden><svg aria-hidden="true"><use href="#i-up"/></svg></button>
 <div class="toast" id="toast" role="status" hidden></div>
@@ -619,6 +621,12 @@ footer a{color:var(--muted)}
 <script>
 (() => {
   'use strict';
+  /* защита от встраивания сайта в чужую страницу (clickjacking): через meta-CSP frame-ancestors задать нельзя */
+  if (window.top !== window.self) {
+    document.documentElement.style.display = 'none';
+    try { window.top.location.href = window.self.location.href; } catch {}
+    return;
+  }
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -843,6 +851,35 @@ footer a{color:var(--muted)}
   const aiChat = $('#aiChat'), aiFab = $('#aiFab'), aiMessages = $('#aiMessages'), aiInput = $('#aiInput');
   const aiForm = $('#aiForm'), aiSend = $('#aiSend'), aiStatus = $('#aiStatus'), aiExamples = $('#aiExamples');
   const aiEndpoint = aiChat.dataset.aiEndpoint.trim(); let aiHistory = [], aiBusy = false;
+
+  /* Cloudflare Turnstile: включается, только если в data-turnstile-sitekey указан ключ сайта. Пока ключа нет, ничего не загружается. */
+  const tsKey = (aiChat.dataset.turnstileSitekey || '').trim();
+  const TS_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+  let tsLoading = null, tsId = null, tsWaiter = null;
+  const loadTurnstile = () => tsLoading || (tsLoading = new Promise((resolve, reject) => {
+    if (window.turnstile) return resolve(window.turnstile);
+    const sc = document.createElement('script');
+    sc.src = TS_SRC; sc.async = true;
+    sc.onload = () => (window.turnstile ? resolve(window.turnstile) : reject(new Error('turnstile_error')));
+    sc.onerror = () => { tsLoading = null; reject(new Error('turnstile_error')); };
+    document.head.append(sc);
+  }));
+  const getToken = async () => {
+    if (!tsKey) return undefined;
+    const ts = await loadTurnstile();
+    if (tsId === null) {
+      tsId = ts.render('#aiTs', {
+        sitekey: tsKey, execution: 'execute', appearance: 'interaction-only',
+        callback: token => tsWaiter && tsWaiter.resolve(token),
+        'error-callback': () => tsWaiter && tsWaiter.reject(new Error('turnstile_error')),
+      });
+    }
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => { tsWaiter = null; reject(new Error('turnstile_error')); }, 25000);
+      tsWaiter = { resolve: t => { clearTimeout(timer); tsWaiter = null; resolve(t); }, reject: e => { clearTimeout(timer); tsWaiter = null; reject(e); } };
+      ts.reset(tsId); ts.execute(tsId);
+    });
+  };
   const escapeHtml = value => value.replace(/[&<>'"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[c]);
   const formatAnswer = value => escapeHtml(value).split(/\n{2,}/).map(p => {
     const line = p.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/`(.+?)`/g, '<code>$1</code>');
@@ -865,7 +902,7 @@ footer a{color:var(--muted)}
     aiMessages.scrollTop = aiMessages.scrollHeight;
   };
   const greeting = () => addMessage('assistant', 'Здравствуйте! Я помогу с правилами городской мафии Hanami. Опишите ситуацию — отвечу по опубликованной инструкции и укажу раздел-основание.');
-  const openAi = open => { aiChat.hidden = !open; aiFab.setAttribute('aria-expanded', String(open)); if (open) { aiInput.focus({ preventScroll: true }); if (!aiMessages.children.length) greeting(); } };
+  const openAi = open => { aiChat.hidden = !open; aiFab.setAttribute('aria-expanded', String(open)); if (open) { if (tsKey) loadTurnstile().catch(() => {}); aiInput.focus({ preventScroll: true }); if (!aiMessages.children.length) greeting(); } };
   aiFab.onclick = () => openAi(aiChat.hidden); $('#aiClose').onclick = () => openAi(false);
   $('#aiClear').onclick = () => { aiHistory = []; aiMessages.replaceChildren(); aiExamples.hidden = false; aiStatus.textContent = ''; greeting(); aiInput.focus(); };
   aiExamples.onclick = e => { const button = e.target.closest('button'); if (button) { aiInput.value = button.textContent; aiForm.requestSubmit(); } };
@@ -875,13 +912,16 @@ footer a{color:var(--muted)}
     if (!aiEndpoint) { aiStatus.textContent = 'ИИ-помощник временно недоступен: сервер ещё не настроен.'; return; }
     addMessage('user', question); aiInput.value = ''; aiBusy = true; aiSend.disabled = true; aiStatus.className = 'ai-status ai-typing'; aiStatus.textContent = 'Ищу правила и формирую ответ';
     try {
-      const res = await fetch(aiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question, history: aiHistory.slice(-6) }), signal: AbortSignal.timeout(25000) });
+      const turnstileToken = await getToken();
+      const res = await fetch(aiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question, history: aiHistory.slice(-6), turnstileToken }), signal: AbortSignal.timeout(25000) });
       const data = await res.json().catch(() => ({})); if (!res.ok) throw new Error(data.error || 'request_failed');
       addMessage('assistant', data.answer, Array.isArray(data.sources) ? data.sources : []); aiHistory.push({ role: 'user', content: question }, { role: 'assistant', content: data.answer });
     } catch (error) {
       const code = error instanceof Error ? error.message : '';
       aiStatus.textContent = code === 'rate_limited' ? 'Слишком много запросов. Подождите минуту и попробуйте снова.'
+        : code === 'busy' ? 'Помощник сейчас перегружен. Подождите минуту и попробуйте снова.'
         : code === 'too_large' || code === 'invalid_question' ? 'Вопрос слишком длинный или пустой. Сформулируйте короче.'
+        : code === 'verification_failed' || code === 'turnstile_error' ? 'Не удалось пройти проверку на робота. Обновите страницу и попробуйте снова.'
         : 'ИИ-помощник временно недоступен. Попробуйте ещё раз позже.';
       /* не теряем вопрос пользователя: возвращаем его в поле ввода и убираем пузырь без ответа */
       aiInput.value = question;
