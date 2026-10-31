@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Ben41a8WRCzyHePo5Ewljz4raQjuunUl2byytuWE0bM=' https://challenges.cloudflare.com; style-src 'sha256-cl7QuUSpRAoA6JwP+Uf9RTPf8Akgz1T6tvVg6SAeiXY='; font-src 'self'; img-src 'self' data:; connect-src https://hanami-mafia-support.santalu1-hanami.workers.dev; frame-src https://challenges.cloudflare.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZCZiCdp6O9ajAJDD+VrJhyWczTe6B6tFhm3+yTcyEjY=' https://challenges.cloudflare.com; style-src 'sha256-dhWl/1uMSSoPiawkSYO++UGZI0Z/RZW7vsqGvLE2KeE='; font-src 'self'; img-src 'self' data:; connect-src https://hanami-mafia-support.santalu1-hanami.workers.dev; frame-src https://challenges.cloudflare.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0e0f14">
 <meta name="color-scheme" content="dark">
@@ -204,11 +204,12 @@ td:first-child{font-weight:600;white-space:nowrap}
 /* ИИ-техподдержка: endpoint задаётся только после развёртывания Worker. */
 .ai-fab{position:fixed;z-index:33;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(78px + env(safe-area-inset-bottom,0px));min-height:48px;padding:0 16px;border:1px solid var(--pink-line);border-radius:99px;background:var(--panel);color:var(--text);font:650 .88rem/1 var(--f-body);display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.42)}
 .ai-fab:hover{border-color:var(--pink);background:var(--pink-bg)}.ai-dot{width:9px;height:9px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 4px rgba(229,155,183,.13)}
-.ai-chat{position:fixed;z-index:35;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(136px + env(safe-area-inset-bottom,0px));width:min(420px,calc(100vw - 32px));height:min(620px,calc(100dvh - 160px));min-width:320px;min-height:440px;resize:both;display:flex;flex-direction:column;overflow:hidden;background:var(--panel);border:1px solid var(--line2);border-radius:20px;box-shadow:0 26px 70px rgba(0,0,0,.62);animation:rise .18s ease-out}
+.ai-chat{position:fixed;z-index:35;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(136px + env(safe-area-inset-bottom,0px));width:min(var(--cw,420px),calc(100vw - 32px));height:min(var(--ch,620px),calc(100dvh - 160px));min-width:320px;min-height:440px;display:flex;flex-direction:column;overflow:hidden;background:var(--panel);border:1px solid var(--line2);border-radius:20px;box-shadow:0 26px 70px rgba(0,0,0,.62);animation:rise .18s ease-out}
+.ai-chat[data-size=full]{left:16px;top:16px;right:16px;bottom:16px;width:auto;height:auto;max-width:980px;margin:auto}.ai-grip{position:absolute;top:0;left:0;z-index:2;width:28px;height:28px;cursor:nwse-resize;touch-action:none;border-radius:20px 0 8px 0;background:linear-gradient(135deg,var(--pink) 0 2px,transparent 2px 6px,var(--pink) 6px 8px,transparent 8px 12px,var(--pink) 12px 14px,transparent 14px);opacity:.55}.ai-grip:hover,.ai-grip:focus-visible{opacity:1}.ai-chat[data-size=full] .ai-grip{display:none}.ai-head{padding-left:34px!important}.ai-copy{align-self:flex-start;margin:-4px 0 0 4px;font:500 .72rem/1 var(--f-body);color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:8px;padding:5px 8px;cursor:pointer}.ai-copy:hover{color:var(--text);border-color:var(--pink-line)}.ai-source-plain{display:inline-block;margin:3px 6px 0 0;color:var(--muted)}.ai-form textarea{max-height:150px}.ai-head .ai-size svg{width:16px;height:16px}
 .ai-head{display:flex;align-items:center;gap:10px;padding:15px 16px;border-bottom:1px solid var(--line);background:linear-gradient(100deg,#251a21,#16181f)}.ai-head b{font:650 .88rem/1.3 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--pink)}.ai-head span{font-size:.76rem;color:var(--muted);margin-right:auto}.ai-head button{width:32px;height:32px}
 .ai-messages{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}.ai-message{max-width:91%;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);font-size:.92rem;line-height:1.55;white-space:pre-wrap}.ai-message.user{align-self:flex-end;background:var(--pink-bg);border-color:var(--pink-line)}.ai-message.assistant{align-self:flex-start}.ai-message p{margin:0 0 8px}.ai-message p:last-child{margin-bottom:0}.ai-message ul,.ai-message ol{margin:7px 0;padding-left:20px}.ai-message a{color:var(--pink)}
 .ai-sources{align-self:flex-start;max-width:91%;font-size:.76rem;color:var(--muted);margin-top:-5px}.ai-sources a{display:inline-block;margin:3px 6px 0 0;color:var(--pink)}.ai-examples{display:flex;flex-wrap:wrap;gap:6px;margin:0 14px 10px}.ai-examples button{font:500 .75rem/1.25 var(--f-body);text-align:left;color:var(--muted);background:transparent;border:1px solid var(--line);padding:7px 9px;border-radius:10px;cursor:pointer}.ai-examples button:hover{border-color:var(--pink-line);color:var(--text)}
-.ai-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:var(--panel2)}.ai-form textarea{min-width:0;flex:1;resize:none;max-height:110px;padding:10px 11px;color:var(--text);font:inherit;line-height:1.4;background:var(--bg);border:1px solid var(--line2);border-radius:11px}.ai-form textarea:focus{outline:none;border-color:var(--pink)}.ai-form button{align-self:end;min-height:40px;padding:0 13px;border:0;border-radius:11px;background:var(--pink);color:#1a0f15;font:700 .84rem/1 var(--f-body);cursor:pointer}.ai-form button:disabled{opacity:.55;cursor:wait}.ai-ts{margin:0 14px 8px}.ai-ts:empty{display:none}.ai-status{min-height:1.2em;margin:0 14px 8px;color:var(--gold);font-size:.78rem}.ai-typing::after{content:' …';animation:typing 1s steps(4,end) infinite}@keyframes typing{50%{opacity:.25}}
+.ai-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:var(--panel2)}.ai-form textarea{min-width:0;flex:1;resize:none;max-height:150px;padding:10px 11px;color:var(--text);font:inherit;line-height:1.4;background:var(--bg);border:1px solid var(--line2);border-radius:11px}.ai-form textarea:focus{outline:none;border-color:var(--pink)}.ai-form button{align-self:end;min-height:40px;padding:0 13px;border:0;border-radius:11px;background:var(--pink);color:#1a0f15;font:700 .84rem/1 var(--f-body);cursor:pointer}.ai-form button:disabled{opacity:.55;cursor:wait}.ai-ts{margin:0 14px 8px}.ai-ts:empty{display:none}.ai-status{min-height:1.2em;margin:0 14px 8px;color:var(--gold);font-size:.78rem}.ai-typing::after{content:' …';animation:typing 1s steps(4,end) infinite}@keyframes typing{50%{opacity:.25}}
 .rule-details{margin:18px 0;padding:0 15px 14px;border:1px solid var(--line2);border-radius:13px;background:var(--panel2)}.rule-details summary{padding:13px 0 10px;color:var(--pink);font-weight:650;cursor:pointer}.rule-details h3{margin:18px 0 6px}.rule-details .dots{margin-top:5px}
 
 footer{margin-top:34px;padding:24px 0 8px;text-align:center;color:var(--muted);font-size:.86rem}
@@ -220,7 +221,7 @@ footer a{color:var(--muted)}
   .digits{font-size:3.4rem}
   .panel{left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));width:auto}
   .fab{padding:0 16px}
-  .ai-fab{bottom:calc(76px + env(safe-area-inset-bottom,0px));padding:0 14px}.ai-chat{left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(132px + env(safe-area-inset-bottom,0px));width:auto;height:min(620px,calc(100dvh - 150px));min-width:0;min-height:0;resize:none}
+  .ai-fab{bottom:calc(76px + env(safe-area-inset-bottom,0px));padding:0 14px}.ai-chat{left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(132px + env(safe-area-inset-bottom,0px));width:auto;height:min(620px,calc(100dvh - 150px));min-width:0;min-height:0}.ai-grip{display:none}.ai-chat[data-size=full]{left:8px;right:8px;top:8px;bottom:8px}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -608,7 +609,8 @@ footer a{color:var(--muted)}
 <button class="fab" type="button" id="fab" aria-expanded="false" aria-controls="panel"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg><span id="fabText">Таймер</span></button>
 <button class="ai-fab" type="button" id="aiFab" aria-expanded="false" aria-controls="aiChat"><i class="ai-dot" aria-hidden="true"></i>ИИ-помощник</button>
 <section class="ai-chat" id="aiChat" role="dialog" aria-modal="false" aria-label="ИИ-помощник Hanami" data-ai-endpoint="https://hanami-mafia-support.santalu1-hanami.workers.dev" data-turnstile-sitekey="" hidden>
-  <div class="ai-head"><i class="ai-dot" aria-hidden="true"></i><b>ИИ-помощник</b><span>Правила Hanami</span><button class="x" type="button" id="aiClear" aria-label="Очистить диалог" title="Очистить диалог">↺</button><button class="x" type="button" id="aiClose" aria-label="Закрыть чат">×</button></div>
+  <div class="ai-grip" id="aiGrip" role="button" aria-label="Изменить размер окна: потяните или нажимайте стрелки" tabindex="0"></div>
+  <div class="ai-head"><i class="ai-dot" aria-hidden="true"></i><b>ИИ-помощник</b><span>Правила Hanami</span><button class="x ai-size" type="button" id="aiSize" aria-label="Размер окна: обычное, большое, на весь экран" title="Размер окна">⤢</button><button class="x" type="button" id="aiClear" aria-label="Очистить диалог" title="Очистить диалог">↺</button><button class="x" type="button" id="aiClose" aria-label="Закрыть чат">×</button></div>
   <div class="ai-messages" id="aiMessages" aria-live="polite"></div>
   <div class="ai-examples" id="aiExamples" aria-label="Примеры вопросов"><button type="button">Что делать, если игрок вышел во время голосования?</button><button type="button">За что выдаётся фол?</button><button type="button">Что делать при ничьей на голосовании?</button><button type="button">Как правильно провести техническую паузу?</button><button type="button">Что делать, если игрок не подтвердил роль?</button></div>
   <div class="ai-ts" id="aiTs"></div>
@@ -891,16 +893,41 @@ footer a{color:var(--muted)}
     const el = document.createElement('div'); el.className = 'ai-message ' + role;
     if (role === 'assistant') el.innerHTML = formatAnswer(text); else el.textContent = text;
     aiMessages.append(el);
+    if (role === 'assistant' && aiMessages.children.length > 1) { const c = document.createElement('button'); c.type = 'button'; c.className = 'ai-copy'; c.textContent = 'Копировать'; c.onclick = () => { copyText(el.innerText).then(() => { c.textContent = 'Скопировано'; setTimeout(() => { c.textContent = 'Копировать'; }, 1500); }, () => {}); }; aiMessages.append(c); }
     if (sources.length) { const box = document.createElement('div'); box.className = 'ai-sources'; box.textContent = 'Основание: ';
       /* принимаем только якоря на разделы нашего сайта: в ссылку подставляется лишь #раздел, чужой адрес невозможен */
       sources.forEach(({ title, url }) => {
         const m = typeof url === 'string' && typeof title === 'string' && /^https:\/\/1santalu1\.github\.io\/[A-Za-z0-9._-]+\/#([a-z0-9-]+)$/.exec(url);
-        if (!m) return;
+        if (!m) { if (url === '' && typeof title === 'string' && title.length < 120) { const t = document.createElement('span'); t.className = 'ai-source-plain'; t.textContent = title; box.append(t); } return; }
         const a = document.createElement('a'); a.href = '#' + m[1]; a.textContent = title; box.append(a);
       });
       if (box.children.length) aiMessages.append(box); }
     aiMessages.scrollTop = aiMessages.scrollHeight;
   };
+  /* размер окна: три режима (кнопка в шапке), плавное растягивание за левый верхний угол, выбор запоминается */
+  const SIZES = ['s', 'm', 'full'], clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const applySize = () => {
+    const sz = store.get('aiSize', 's'), custom = store.get('aiDim', null);
+    aiChat.dataset.size = SIZES.includes(sz) || (sz === 'custom' && Array.isArray(custom) && custom.length === 2 && custom.every(Number.isFinite)) ? sz : 's';
+    const dim = aiChat.dataset.size === 'm' ? [640, 760] : custom && aiChat.dataset.size === 'custom' ? custom : [420, 620];
+    aiChat.style.setProperty('--cw', dim[0] + 'px'); aiChat.style.setProperty('--ch', dim[1] + 'px');
+  };
+  $('#aiSize').onclick = () => { const sz = aiChat.dataset.size, order = innerWidth < 720 ? ['s', 'full'] : SIZES; store.set('aiSize', order[(order.indexOf(sz) + 1) % order.length]); store.set('aiDim', null); applySize(); };
+  const grip = $('#aiGrip');
+  grip.addEventListener('pointerdown', e => {
+    e.preventDefault(); grip.setPointerCapture(e.pointerId);
+    const r = aiChat.getBoundingClientRect(), sx = e.clientX, sy = e.clientY;
+    const move = ev => { const w = clamp(r.width + sx - ev.clientX, 320, innerWidth - 32), h = clamp(r.height + sy - ev.clientY, 440, innerHeight - 160); aiChat.dataset.size = 'custom'; aiChat.style.setProperty('--cw', w + 'px'); aiChat.style.setProperty('--ch', h + 'px'); };
+    const up = ev => { grip.removeEventListener('pointermove', move); grip.removeEventListener('pointerup', up); grip.removeEventListener('pointercancel', up);
+      const b = aiChat.getBoundingClientRect(); store.set('aiSize', 'custom'); store.set('aiDim', [Math.round(b.width), Math.round(b.height)]); };
+    grip.addEventListener('pointermove', move); grip.addEventListener('pointerup', up); grip.addEventListener('pointercancel', up);
+  });
+  grip.addEventListener('dblclick', () => { store.set('aiSize', 's'); store.set('aiDim', null); applySize(); });
+  grip.addEventListener('keydown', e => { const d = { ArrowLeft: [40, 0], ArrowRight: [-40, 0], ArrowUp: [0, 40], ArrowDown: [0, -40] }[e.key]; if (!d) return; e.preventDefault();
+    const b = aiChat.getBoundingClientRect(); aiChat.dataset.size = 'custom'; aiChat.style.setProperty('--cw', clamp(b.width + d[0], 320, innerWidth - 32) + 'px'); aiChat.style.setProperty('--ch', clamp(b.height + d[1], 440, innerHeight - 160) + 'px');
+    store.set('aiSize', 'custom'); store.set('aiDim', [Math.round(aiChat.getBoundingClientRect().width), Math.round(aiChat.getBoundingClientRect().height)]); });
+  applySize();
+  aiInput.addEventListener('input', () => { aiInput.style.height = 'auto'; aiInput.style.height = Math.min(aiInput.scrollHeight, 150) + 'px'; });
   const greeting = () => addMessage('assistant', 'Здравствуйте! Я помогу с правилами городской мафии Hanami. Опишите ситуацию — отвечу по опубликованной инструкции и укажу раздел-основание.');
   const openAi = open => { aiChat.hidden = !open; aiFab.setAttribute('aria-expanded', String(open)); if (open) { if (tsKey) loadTurnstile().catch(() => {}); aiInput.focus({ preventScroll: true }); if (!aiMessages.children.length) greeting(); } };
   aiFab.onclick = () => openAi(aiChat.hidden); $('#aiClose').onclick = () => openAi(false);
@@ -910,12 +937,12 @@ footer a{color:var(--muted)}
     e.preventDefault(); const question = aiInput.value.trim(); if (!question || aiBusy) return;
     aiExamples.hidden = true;
     if (!aiEndpoint) { aiStatus.textContent = 'ИИ-помощник временно недоступен: сервер ещё не настроен.'; return; }
-    addMessage('user', question); aiInput.value = ''; aiBusy = true; aiSend.disabled = true; aiStatus.className = 'ai-status ai-typing'; aiStatus.textContent = 'Ищу правила и формирую ответ';
+    addMessage('user', question); aiInput.value = ''; aiInput.style.height = ''; aiBusy = true; aiSend.disabled = true; aiStatus.className = 'ai-status ai-typing'; aiStatus.textContent = 'Ищу правила и формирую ответ';
     try {
       const turnstileToken = await getToken();
       const res = await fetch(aiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question, history: aiHistory.slice(-6), turnstileToken }), signal: AbortSignal.timeout(25000) });
       const data = await res.json().catch(() => ({})); if (!res.ok) throw new Error(data.error || 'request_failed');
-      addMessage('assistant', data.answer, Array.isArray(data.sources) ? data.sources : []); aiHistory.push({ role: 'user', content: question }, { role: 'assistant', content: data.answer });
+      aiStatus.textContent = ''; addMessage('assistant', data.answer, Array.isArray(data.sources) ? data.sources : []); aiHistory.push({ role: 'user', content: question }, { role: 'assistant', content: data.answer });
     } catch (error) {
       const code = error instanceof Error ? error.message : '';
       aiStatus.textContent = code === 'rate_limited' ? 'Слишком много запросов. Подождите минуту и попробуйте снова.'
