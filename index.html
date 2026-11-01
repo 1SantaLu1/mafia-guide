@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-s91PQTaiEfHTg8GAQ+GuxT+12oQai7cB4k9i5jqMOTg=' https://challenges.cloudflare.com; style-src 'sha256-IYsC7CJ/QdNy85NOZ8s5Ji8Hnr0GmBvC/dlf4hO/Kls='; font-src 'self'; img-src 'self' data:; connect-src https://hanami-mafia-support.santalu1-hanami.workers.dev; frame-src https://challenges.cloudflare.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-OZ5ethbIyl0m77gaeB3unALXvcaJtpaG4YcLau7w9YM=' https://challenges.cloudflare.com; style-src 'sha256-yLej1HIz2vNVdrZWEXGzpXKfAuywJo9grfwrG/0e4jI='; font-src 'self'; img-src 'self' data:; connect-src https://hanami-mafia-support.santalu1-hanami.workers.dev; frame-src https://challenges.cloudflare.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0e0f14">
 <meta name="color-scheme" content="dark">
@@ -50,7 +50,8 @@ a{color:var(--pink);text-underline-offset:3px}
 .skip:focus{top:12px}
 
 /* верхняя панель */
-.top{position:sticky;top:0;z-index:20;background:rgba(14,15,20,.9);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.top{position:sticky;top:0;z-index:20;transition:transform .22s ease;background:rgba(14,15,20,.9);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.top.compact{transform:translateY(calc(-1 * var(--bar-h,50px)))}
 .bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-block:10px 4px}
 .brand{font:700 .78rem/1 var(--f-body);letter-spacing:.12em;color:var(--text);text-decoration:none;white-space:nowrap}
 .brand span:first-child{color:var(--pink)}
@@ -61,9 +62,16 @@ a{color:var(--pink);text-underline-offset:3px}
 .fs{display:flex;gap:4px}
 .fs button{padding:9px 10px;font-weight:700}
 .fs button:disabled{opacity:.4;cursor:default}
-.chips{position:relative;display:flex;gap:6px;overflow-x:auto;padding-block:6px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chipwrap{position:relative}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-block:6px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch;--fl:36px;--fr:36px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent)}
 .chips::-webkit-scrollbar{display:none}
-.chips:not(.end){-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}
+.chips.at-start{--fl:0px}.chips.end{--fr:0px}
+.chips.drag{cursor:grabbing;scroll-snap-type:none}.chips.drag a{pointer-events:none}
+.cnav{display:none;position:absolute;top:5px;z-index:2;width:30px;height:30px;padding:0;align-items:center;justify-content:center;font:600 1.1rem/1 var(--f-body);color:var(--text);background:var(--panel);border:1px solid var(--line2);border-radius:99px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.45)}
+.cnav:hover{border-color:var(--pink-line);color:var(--pink)}
+.cnav.prev{left:2px}.cnav.next{right:2px}
+@media(hover:hover) and (pointer:fine){.chipwrap.can-prev .cnav.prev,.chipwrap.can-next .cnav.next{display:inline-flex}}
+@media(pointer:coarse){.chips{gap:8px}.chips a{padding:12px 15px;font-size:.86rem}}
 .chips a{flex:none;font:500 .82rem/1 var(--f-body);padding:8px 12px;border-radius:99px;border:1px solid var(--line);color:var(--muted);text-decoration:none;background:var(--panel)}
 .chips a:hover{color:var(--text)}
 .chips a.on{color:var(--text);border-color:var(--pink);background:var(--pink-bg)}
@@ -271,7 +279,9 @@ footer a{color:var(--muted)}
       <button class="btn print" type="button" id="printBtn">Печать</button>
     </div>
   </div>
-  <nav class="in chips" id="chips" aria-label="Разделы инструкции">
+  <div class="in chipwrap" id="chipwrap">
+  <button class="cnav prev" type="button" tabindex="-1" aria-hidden="true" id="chipPrev">‹</button>
+  <nav class="chips at-start" id="chips" aria-label="Разделы инструкции">
     <a href="#roles">Роли</a>
     <a href="#start">Запуск</a>
     <a href="#confirm">Подтверждение</a>
@@ -284,6 +294,8 @@ footer a{color:var(--muted)}
     <a href="#pause">Тех пауза</a>
     <a href="#end">Конец игры</a>
   </nav>
+  <button class="cnav next" type="button" tabindex="-1" aria-hidden="true" id="chipNext">›</button>
+  </div>
   <div class="prog" id="prog" aria-hidden="true"></div>
 </header>
 
@@ -657,12 +669,23 @@ footer a{color:var(--muted)}
 
   /* прогресс чтения и кнопка «наверх» */
   const prog = $('#prog'), up = $('#up');
-  let queued = false;
+  let queued = false, lastY = scrollY;
+  const topBar = $('#top'), barRow = $('.bar', topBar);
+  const setBarH = () => topBar.style.setProperty('--bar-h', barRow.offsetHeight + 'px');
+  const setCompact = on => { if (topBar.classList.contains('compact') !== on) topBar.classList.toggle('compact', on); };
+  setBarH(); addEventListener('resize', setBarH);
+  topBar.addEventListener('focusin', () => setCompact(false));
   const onScroll = () => {
     queued = false;
     const h = document.documentElement.scrollHeight - innerHeight;
     prog.style.transform = 'scaleX(' + (h > 0 ? Math.min(1, scrollY / h) : 0) + ')';
     up.hidden = scrollY < 700;
+    /* верхняя строка уезжает вверх при прокрутке вниз и возвращается при прокрутке вверх; меню разделов остаётся на виду */
+    const dy = scrollY - lastY;
+    if (scrollY < 120) setCompact(false);
+    else if (dy > 6) setCompact(true);
+    else if (dy < -6) setCompact(false);
+    if (Math.abs(dy) > 6) lastY = scrollY;
   };
   addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(onScroll); } }, { passive: true });
   onScroll();
@@ -684,10 +707,36 @@ footer a{color:var(--muted)}
     const chip = $('a[href="#' + id + '"]', chipBox);
     if (chip) chipBox.scrollTo({ left: chip.offsetLeft - (chipBox.clientWidth - chip.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
   };
-  const chipEnd = () => chipBox.classList.toggle('end', chipBox.scrollLeft + chipBox.clientWidth >= chipBox.scrollWidth - 4);
+  /* меню разделов: затемнение и стрелки показываются только там, где есть что прокручивать */
+  const chipWrap = $('#chipwrap');
+  const chipEnd = () => {
+    const atStart = chipBox.scrollLeft <= 4, atEnd = chipBox.scrollLeft + chipBox.clientWidth >= chipBox.scrollWidth - 4;
+    chipBox.classList.toggle('at-start', atStart); chipBox.classList.toggle('end', atEnd);
+    chipWrap.classList.toggle('can-prev', !atStart); chipWrap.classList.toggle('can-next', !atEnd);
+  };
   chipBox.addEventListener('scroll', chipEnd, { passive: true });
   addEventListener('resize', chipEnd);
   chipEnd();
+  const chipStep = dir => chipBox.scrollBy({ left: dir * chipBox.clientWidth * 0.7, behavior: reduce ? 'auto' : 'smooth' });
+  $('#chipPrev').onclick = () => chipStep(-1); $('#chipNext').onclick = () => chipStep(1);
+  /* колесо мыши над меню листает его вбок, пока есть куда; у края страница прокручивается как обычно */
+  chipBox.addEventListener('wheel', e => {
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+    const max = chipBox.scrollWidth - chipBox.clientWidth;
+    if ((e.deltaY < 0 && chipBox.scrollLeft <= 0) || (e.deltaY > 0 && chipBox.scrollLeft >= max - 1)) return;
+    e.preventDefault(); chipBox.scrollLeft += e.deltaY;
+  }, { passive: false });
+  /* перетаскивание мышью; обычный клик по разделу работает как раньше */
+  chipBox.addEventListener('dragstart', e => e.preventDefault());
+  let dragX = null, dragLeft = 0, dragged = false;
+  chipBox.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse' && e.button === 0) { dragX = e.clientX; dragLeft = chipBox.scrollLeft; dragged = false; } });
+  addEventListener('pointermove', e => {
+    if (dragX === null) return;
+    if (!dragged && Math.abs(e.clientX - dragX) > 6) { dragged = true; chipBox.classList.add('drag'); }
+    if (dragged) chipBox.scrollLeft = dragLeft - (e.clientX - dragX);
+  });
+  const dragEnd = () => { dragX = null; chipBox.classList.remove('drag'); };
+  addEventListener('pointerup', dragEnd); addEventListener('pointercancel', dragEnd);
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setActive(e.target.id); }), { rootMargin: '-30% 0px -62% 0px' });
     secs.forEach(s => io.observe(s));
@@ -853,7 +902,7 @@ footer a{color:var(--muted)}
   /* ИИ-помощник: переписка живёт только в памяти открытой вкладки. */
   const aiChat = $('#aiChat'), aiFab = $('#aiFab'), aiMessages = $('#aiMessages'), aiInput = $('#aiInput');
   const aiForm = $('#aiForm'), aiSend = $('#aiSend'), aiStatus = $('#aiStatus'), aiExamples = $('#aiExamples');
-  const aiEndpoint = aiChat.dataset.aiEndpoint.trim(); let aiHistory = [], aiBusy = false, aiLast = null, aiSentAt = 0;
+  const aiEndpoint = aiChat.dataset.aiEndpoint.trim(); let aiHistory = [], aiBusy = false, aiLast = null;
 
   /* Cloudflare Turnstile: включается, только если в data-turnstile-sitekey указан ключ сайта. Пока ключа нет, ничего не загружается. */
   const tsKey = (aiChat.dataset.turnstileSitekey || '').trim();
@@ -948,10 +997,9 @@ footer a{color:var(--muted)}
     if (aiLast && sameKey(aiLast.q) === sameKey(question) && Date.now() - aiLast.at < 10 * 60 * 1000 && aiMessages.querySelector('.ai-message.assistant:last-of-type, .ai-message.assistant')) {
       aiStatus.className = 'ai-status'; aiStatus.textContent = 'Этот вопрос вы уже задавали, ответ выше. Уточните или задайте другой.'; aiInput.value = ''; aiInput.style.height = ''; aiMessages.scrollTop = aiMessages.scrollHeight; return;
     }
-    if (Date.now() - aiSentAt < 1500) return;
     aiExamples.hidden = true;
     if (!aiEndpoint) { aiStatus.textContent = 'ИИ-помощник временно недоступен: сервер ещё не настроен.'; return; }
-    aiSentAt = Date.now(); addMessage('user', question); aiInput.value = ''; aiInput.style.height = ''; aiBusy = true; aiSend.disabled = true; aiStatus.className = 'ai-status ai-typing'; aiStatus.textContent = 'Ищу правила и формирую ответ';
+    addMessage('user', question); aiInput.value = ''; aiInput.style.height = ''; aiBusy = true; aiSend.disabled = true; aiStatus.className = 'ai-status ai-typing'; aiStatus.textContent = 'Ищу правила и формирую ответ';
     try {
       const turnstileToken = await getToken();
       const res = await fetch(aiEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question, history: aiHistory.slice(-6), turnstileToken, stream: true }), signal: AbortSignal.timeout(50000) });
